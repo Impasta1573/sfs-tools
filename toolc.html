@@ -267,7 +267,9 @@ function downloadBlob(blob) {
 document.addEventListener('mousedown', function () {
     document.getElementById('mousedownSound').play();
 });
-
+document.addEventListener('mouseup', function () {
+    document.getElementById('mouseupSound').play();
+});
 
         function modifyText(originalText) {
     // Modify your text content as needed (e.g., change numbers)
