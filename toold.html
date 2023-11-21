@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SFS PLANET VALUE SHUFFLE</title>
+    <!-- Include JSZip library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.6.0/jszip.min.js"></script>
+    <style>
+        #menu {
+	background: #292A2E;
+	color: #FFF;
+	height: 45px;
+	padding-left: 18px;
+	border-radius: 15px;
+	border: 2px solid #FFFFFF;
+}
+#menu ul, #menu li {
+	margin: 0 auto;
+	padding: 0;
+	list-style: none
+}
+#menu ul {
+	width: 100%;
+}
+#menu li {
+	float: left;
+	display: inline;
+	position: relative;
+}
+#menu a {
+	display: block;
+	line-height: 41px;
+	padding: 0 14px;
+	text-decoration: none;
+	color: #FFFFFF;
+	font-size: 16px;
+	text-transform: capitalize;
+}
+#menu a.dropdown-arrow:after {
+	content: "\23F7";
+	margin-left: 5px;
+}
+#menu li a:hover {
+	color: #FFFFFF;
+	background: #000000;
+}
+#menu input {
+	display: none;
+	margin: 0;
+	padding: 0;
+	height: 45px;
+	width: 100%;
+	opacity: 0;
+	cursor: pointer
+}
+#menu label {
+	display: none;
+	line-height: 41px;
+	text-align: center;
+	position: absolute;
+	left: 35px
+}
+#menu label:before {
+	font-size: 1.6em;
+	content: "\2261"; 
+	margin-left: 20px;
+}
+#menu ul.sub-menus{
+	height: auto;
+	overflow: hidden;
+	width: 170px;
+	background: #444444;
+	position: absolute;
+	z-index: 99;
+	display: none;
+}
+#menu ul.sub-menus li {
+	display: block;
+	width: 100%;
+}
+#menu ul.sub-menus a {
+	color: #FFFFFF;
+	font-size: 16px;
+	text-transform: capitalize;
+}
+#menu li:hover ul.sub-menus {
+	display: block
+}
+#menu ul.sub-menus a:hover{
+	background: #000000;
+	color: #FFFFFF;
+}
+@media screen and (max-width: 800px){
+	#menu {position:relative}
+	#menu ul {background:#111;position:absolute;top:100%;right:0;left:0;z-index:3;height:auto;display:none}
+	#menu ul.sub-menus {width:100%;position:static;}
+	#menu ul.sub-menus a {padding-left:30px;}
+	#menu li {display:block;float:none;width:auto;}
+	#menu input, #menu label {position:absolute;top:0;left:0;display:block}
+	#menu input {z-index:4}
+	#menu input:checked + label {color:white}
+	#menu input:checked + label:before {content:"\00d7"}
+	#menu input:checked ~ ul {display:block}
+}
+
+        /* Your styles here */
+body {
+            font-family: Verdana, sans-serif;
+            background-color: #33343d;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 {
+            font-size: 28px;
+            font-weight: bold;
+        }
+        h2 {
+            font-size: 14px;
+        }
+        p {
+            font-size: 12px;
+        }
+        hr {
+            width: 80%;
+            margin: 10px 0;
+        }
+	#editContainer {
+            display: flex;
+            align-items: center;
+            background-color: #a2a5b0;
+            padding: 10px;
+            margin-top: 20px;
+        }
+        #zipInputText, #zipInputButton {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        #editedText {
+            white-space: pre-wrap;
+            font-family: monospace;
+            margin-top: 20px;
+            display: none;
+        }
+        #uploadContainer {
+            display: flex;
+            align-items: center;
+            background-color: #a2a5b0;
+            padding: 10px;
+        }
+        #uploadText, #uploadButton {
+            font-weight: bold;
+	    margin-right: 10px;
+        }
+	#imageContainer {
+            display: flex;
+            margin-top: 10px;
+        }
+        .image {
+            margin-right: 10px;
+        }
+        .image img {
+            width: 100px; /* Adjust the width as needed */
+            height: auto; /* Maintain aspect ratio */
+        }
+        .caption {
+            font-size: 10px;
+            margin-top: 5px;
+        }
+	#thanksText {
+            font-size: 20px;
+            display: none;
+            margin-top: 20px;
+        }
+        #resultLink {
+            margin-top: 20px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <nav id='menu'>
+  <input type='checkbox' id='responsive-menu' onclick='updatemenu()'><label></label>
+  <ul>
+    <li><a href='toola.html'>IMAGE TO STRUTS</a></li>
+    <li><a href='toolb.html'>TANK SMOOTHER</a></li>
+    <li><a href='toolc.html'>RANDOM PLANET </a></li>
+    <li><a href='toold.html'>SAVE FIXER</a></li>
+  </ul>
+</nav>
+    <h1>SFS QUICKSAVE FREEZE FIXER</h1>
+    <h2>(SBST)</h2>
+    <hr>
+
+    <p>
+        <b>ABOUT:</b> This may be useful for saves with long-term missions, in case you run into an issue that too much timewarping literally corrupts that save.
+    </p>
+
+    <p>
+        <b>USAGE:</b> Upload your WorldState.txt file, and get a fixed version to replace the old one.
+    </p>
+
+    <hr>
+
+    <!-- Your existing content here -->
+
+<audio id="mousedownSound" src="down.mp3"></audio>
+    <audio id="mouseupSound" src="up.mp3"></audio>
+
+    <!-- Your existing content here -->
+
+    <div id="uploadContainer">
+        <p id="uploadText">UPLOAD WORLD STATE</p><br>
+        <input type="file" id="fileInput" accept=".txt" onchange="handleFile()">
+    </div>
+<p id="thanksText">Thanks for visiting!</p>
+    <script>
+        function handleFile() {
+            const input = document.getElementById('fileInput');
+            const file = input.files[0];
+
+            if (!file) {
+                alert('Please upload a valid text file.');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function (event) {
+                const originalText = event.target.result;
+                const modifiedText = modifyWorldState(originalText);
+                downloadWorldState(modifiedText);
+            };
+
+            reader.readAsText(file);
+        }
+
+        function modifyWorldState(originalText) {
+            try {
+                const worldStateObj = JSON.parse(originalText);
+                worldStateObj.worldTime = 0.0;
+                return JSON.stringify(worldStateObj, null, 2);
+            } catch (error) {
+                alert('Error parsing JSON. Please make sure the file contains valid JSON.');
+                return '';
+            }
+        }
+
+        function downloadWorldState(modifiedText) {
+            const blob = new Blob([modifiedText], { type: 'text/plain' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'WorldState.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+    </script>
+
+    <!-- Your existing script and audio elements here -->
+
+</body>
+</html>

@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SFS PLANET VALUE SHUFFLE</title>
+    <!-- Include JSZip library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.6.0/jszip.min.js"></script>
+    <style>
+        #menu {
+	background: #292A2E;
+	color: #FFF;
+	height: 45px;
+	padding-left: 18px;
+	border-radius: 15px;
+	border: 2px solid #FFFFFF;
+}
+#menu ul, #menu li {
+	margin: 0 auto;
+	padding: 0;
+	list-style: none
+}
+#menu ul {
+	width: 100%;
+}
+#menu li {
+	float: left;
+	display: inline;
+	position: relative;
+}
+#menu a {
+	display: block;
+	line-height: 41px;
+	padding: 0 14px;
+	text-decoration: none;
+	color: #FFFFFF;
+	font-size: 16px;
+	text-transform: capitalize;
+}
+#menu a.dropdown-arrow:after {
+	content: "\23F7";
+	margin-left: 5px;
+}
+#menu li a:hover {
+	color: #FFFFFF;
+	background: #000000;
+}
+#menu input {
+	display: none;
+	margin: 0;
+	padding: 0;
+	height: 45px;
+	width: 100%;
+	opacity: 0;
+	cursor: pointer
+}
+#menu label {
+	display: none;
+	line-height: 41px;
+	text-align: center;
+	position: absolute;
+	left: 35px
+}
+#menu label:before {
+	font-size: 1.6em;
+	content: "\2261"; 
+	margin-left: 20px;
+}
+#menu ul.sub-menus{
+	height: auto;
+	overflow: hidden;
+	width: 170px;
+	background: #444444;
+	position: absolute;
+	z-index: 99;
+	display: none;
+}
+#menu ul.sub-menus li {
+	display: block;
+	width: 100%;
+}
+#menu ul.sub-menus a {
+	color: #FFFFFF;
+	font-size: 16px;
+	text-transform: capitalize;
+}
+#menu li:hover ul.sub-menus {
+	display: block
+}
+#menu ul.sub-menus a:hover{
+	background: #000000;
+	color: #FFFFFF;
+}
+@media screen and (max-width: 800px){
+	#menu {position:relative}
+	#menu ul {background:#111;position:absolute;top:100%;right:0;left:0;z-index:3;height:auto;display:none}
+	#menu ul.sub-menus {width:100%;position:static;}
+	#menu ul.sub-menus a {padding-left:30px;}
+	#menu li {display:block;float:none;width:auto;}
+	#menu input, #menu label {position:absolute;top:0;left:0;display:block}
+	#menu input {z-index:4}
+	#menu input:checked + label {color:white}
+	#menu input:checked + label:before {content:"\00d7"}
+	#menu input:checked ~ ul {display:block}
+}
+
+        /* Your styles here */
+body {
+            font-family: Verdana, sans-serif;
+            background-color: #33343d;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 {
+            font-size: 28px;
+            font-weight: bold;
+        }
+        h2 {
+            font-size: 14px;
+        }
+        p {
+            font-size: 12px;
+        }
+        hr {
+            width: 80%;
+            margin: 10px 0;
+        }
+	#editContainer {
+            display: flex;
+            align-items: center;
+            background-color: #a2a5b0;
+            padding: 10px;
+            margin-top: 20px;
+        }
+        #zipInputText, #zipInputButton {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        #editedText {
+            white-space: pre-wrap;
+            font-family: monospace;
+            margin-top: 20px;
+            display: none;
+        }
+        #zipInputContainer {
+            display: flex;
+            align-items: center;
+            background-color: #a2a5b0;
+            padding: 10px;
+        }
+        #uploadText, #uploadButton {
+            font-weight: bold;
+	    margin-right: 10px;
+        }
+	#imageContainer {
+            display: flex;
+            margin-top: 10px;
+        }
+        .image {
+            margin-right: 10px;
+        }
+        .image img {
+            width: 100px; /* Adjust the width as needed */
+            height: auto; /* Maintain aspect ratio */
+        }
+        .caption {
+            font-size: 10px;
+            margin-top: 5px;
+        }
+	#thanksText {
+            font-size: 20px;
+            display: none;
+            margin-top: 20px;
+        }
+        #resultLink {
+            margin-top: 20px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <nav id='menu'>
+  <input type='checkbox' id='responsive-menu' onclick='updatemenu()'><label></label>
+  <ul>
+    <li><a href='toola.html'>IMAGE TO STRUTS</a></li>
+    <li><a href='toolb.html'>TANK SMOOTHER</a></li>
+    <li><a href='toolc.html'>RANDOM PLANET </a></li>
+    <li><a href='toold.html'>SAVE FIXER</a></li>
+  </ul>
+</nav>
+    <h1>SFS PLANET VALUE SHUFFLE</h1>
+    <h2>(SBST)</h2>
+    <hr>
+
+    <p>
+        <b>ABOUT:</b> This program literally takes your uploaded zip file of planet datas, and shuffles up every single usable value.
+    </p>
+
+    <p>
+        <b>USAGE:</b> Upload your planet data folder as a .zip and see the cursed results O_O
+    </p>
+
+    <hr>
+
+    <!-- Your existing content here -->
+
+<audio id="mousedownSound" src="down.mp3"></audio>
+    <audio id="mouseupSound" src="up.mp3"></audio>
+
+    <!-- Your existing content here -->
+
+    <div id="zipInputContainer">
+        <p id="zipInputText">UPLOAD PLANET DATA ZIP</p>
+        <input type="file" id="zipInput" accept=".zip" onchange="handleZipFile()">
+    </div>
+    <a id="resultLink" download="ModifiedFiles (SHUFFLED).zip" href="#">Download Modified Files</a>
+<p id="thanksText">Thanks for visiting!</p>
+    <script>
+        function handleZipFile() {
+    const input = document.getElementById('zipInput');
+    const file = input.files[0];
+
+    if (!file) {
+        alert('Please upload a valid zip file.');
+        return;
+    }
+
+    const zip = new JSZip();
+
+    zip.loadAsync(file)
+        .then((zipContent) => {
+            const promises = [];
+
+            zipContent.forEach((relativePath, zipEntry) => {
+                if (zipEntry.dir) {
+                    return;
+                }
+
+                promises.push(zipEntry.async('text').then((content) => {
+                    const modifiedContent = modifyText(content);
+                    zip.file(zipEntry.name, modifiedContent);
+                }));
+            });
+
+            Promise.all(promises).then(() => {
+                zip.generateAsync({ type: 'blob' })
+                    .then((blob) => {
+                        downloadBlob(blob);
+                    });
+            });
+        });
+}
+
+function downloadBlob(blob) {
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'ModifiedFiles (SHUFFLED).zip';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    document.getElementById('thanksText').style.display = 'block';
+    document.getElementById('mousedownSound').play();
+}
+
+document.addEventListener('mousedown', function () {
+    document.getElementById('mousedownSound').play();
+});
+
+
+        function modifyText(originalText) {
+    // Modify your text content as needed (e.g., change numbers)
+    // Here's an example: change numbers to a random value within the specified range
+
+    const lines = originalText.split('\n');
+
+    for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+
+        if (line.toLowerCase().includes('version')) {
+            // Exclude lines with the word "version"
+            continue;
+        }
+
+        // Process other lines and change numeric values
+        lines[i] = changeNumber(line);
+    }
+
+    return lines.join('\n');
+
+    function changeNumber(line) {
+        const regex = /\bPOW\d+"|\b\d+(\.\d+)?\b/g;
+        let modifiedLine = line;
+
+        const matches = line.match(regex);
+
+        if (matches) {
+            for (const match of matches) {
+                if (!match.toLowerCase().includes('version')) {
+                    const originalValue = parseFloat(match);
+
+                    if (!isNaN(originalValue)) {
+                        let newValue;
+
+                        if (line.includes('eccentricity') || line.includes('argumentOfPeriapsis')) {
+                            // For eccentricity and argumentOfPeriapsis, set random values between 0 and 1
+                            newValue = Math.random();
+                        } else if (line.includes('direction')) {
+                            // For direction, set values as 1, -1, or 0
+                            newValue = Math.random() > 0.66 ? 1 : (Math.random() > 0.33 ? -1 : 0);
+                        } else if (originalValue <= 1) {
+                            // For other numeric values, set random values within the specified range
+                            newValue = Math.random()
+                        } else {
+                            newValue = Math.random() * (originalValue * 99.75) + (originalValue * 0.25);
+                        }
+
+                        modifiedLine = modifiedLine.replace(match, newValue.toFixed(6));
+                    }
+                }
+            }
+        }
+
+        return modifiedLine;
+    }
+}
+
+
+
+    </script>
+
+    <!-- Your existing script and audio elements here -->
+
+</body>
+</html>
