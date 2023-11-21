@@ -255,7 +255,15 @@ body {
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
-        }
+		document.getElementById('mousedownSound').play();
+}
+
+document.addEventListener('mousedown', function () {
+    document.getElementById('mousedownSound').play();
+});
+document.addEventListener('mouseup', function () {
+    document.getElementById('mouseupSound').play();
+});
     </script>
 
     <!-- Your existing script and audio elements here -->
